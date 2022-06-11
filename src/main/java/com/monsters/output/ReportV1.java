@@ -5,6 +5,8 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class ReportV1 implements Report {
@@ -58,7 +60,7 @@ public class ReportV1 implements Report {
     }
 
     @Override
-    public void exportToExcel() {
+    public void exportToExcel(String outputPath) {
         HashMap<String, Double> mapToPrint = sumEntryList(entryList);
 
 
@@ -87,8 +89,8 @@ public class ReportV1 implements Report {
 
             i_row++;
         }
-
-        try  (OutputStream fileOut = new FileOutputStream("report_1.xls")) {
+        Path path = Paths.get(outputPath, "report_1.xls");
+        try  (OutputStream fileOut = new FileOutputStream(String.valueOf(path))) {
             wb.write(fileOut);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
