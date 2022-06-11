@@ -1,8 +1,12 @@
 package com.monsters;
 
+import com.monsters.util.FileSearcher;
 import org.apache.commons.cli.*;
 
 import com.monsters.util.ArgumentParser;
+
+import java.io.File;
+import java.util.Collection;
 
 public class Main {
     public static void main(String[] args) {
@@ -11,6 +15,8 @@ public class Main {
 
         String xlsPath = ArgumentParser.parseArgs(args);
         System.out.println("Searching for xls in path: " + xlsPath);
+
+        Collection<File> xlsFiles = FileSearcher.getXlsFiles(xlsPath);
 
     }
     
