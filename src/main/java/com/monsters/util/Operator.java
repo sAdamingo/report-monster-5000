@@ -4,6 +4,7 @@ import com.monsters.input.FileReader;
 import com.monsters.output.ReportV1;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Operator {
         FileSearcher fileSearcher = new FileSearcher();
         FileReader fileReader = new FileReader();
         List<Entry> entries;
-        List<Entry> listEntries = null;
+        List<Entry> listEntries = new ArrayList<>();
         Collection<File> files = fileSearcher.findFilesWithExtenstion("(.xls)", inputPath);
         for (File file: files ) {
             entries = fileReader.parseXLS(file.getPath());

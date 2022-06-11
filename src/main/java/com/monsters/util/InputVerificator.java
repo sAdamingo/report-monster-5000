@@ -1,9 +1,13 @@
 package com.monsters.util;
 
+import com.monsters.Main;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 
 public class InputVerificator {
 
+    private static final Logger log = Logger.getLogger(InputVerificator.class.getName());
     private String inputPath;
     private String outputPath;
     private int reportNumber;
@@ -14,16 +18,20 @@ public class InputVerificator {
         this.reportNumber = reportNumber;
     }
 
-    private String verifyInputPath() {
+    private boolean verifyInputPath() {
         if (inputPath.equals("")) {
-            return ".";
+            this.inputPath = "./";
+            return true;
         }
-        return inputPath;
+        return true;
     }
 
     private boolean verifyOutputPath() {
         File f = new File(outputPath);
-        if (f.exists()) return false;
+        if (f.exists()) {
+            return false;
+        }
+        this.outputPath = "./";
         return true;
     }
 
@@ -34,6 +42,7 @@ public class InputVerificator {
                 reportNumber == 4 ||
                 reportNumber == 5) {
             // valid reportNumber
+            this.reportNumber = reportNumber;
             return true;
         }
         return false;
@@ -42,10 +51,35 @@ public class InputVerificator {
     /*
         Returns correct inputPath or throws exception
      */
-    public String veriftyParameters() {
-        if (verifyOutputPath() && verifyReportNumber()) {
-            return verifyInputPath();
-        }
-        throw new IllegalArgumentException("Niepoprawne argumenty");
+    public void verifyParameters() {
+        verifyOutputPath();
+        verifyReportNumber();
+        verifyInputPath();
+
+
+    }
+
+    public String getInputPath() {
+        return inputPath;
+    }
+
+    public void setInputPath(String inputPath) {
+        this.inputPath = inputPath;
+    }
+
+    public String getOutputPath() {
+        return outputPath;
+    }
+
+    public void setOutputPath(String outputPath) {
+        this.outputPath = outputPath;
+    }
+
+    public int getReportNumber() {
+        return reportNumber;
+    }
+
+    public void setReportNumber(int reportNumber) {
+        this.reportNumber = reportNumber;
     }
 }

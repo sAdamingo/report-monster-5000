@@ -1,12 +1,9 @@
 package com.monsters;
 
 import com.monsters.output.ReportV1;
-import com.monsters.util.Entry;
-import com.monsters.util.FileSearcher;
+import com.monsters.util.*;
 
 
-import com.monsters.util.ArgumentParser;
-import com.monsters.util.InputVerificator;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -23,36 +20,17 @@ public class Main {
 
         System.out.println("Welcome to REPORT MONSTER 5000!!!!1!");
 
-        String xlsPath = ArgumentParser.parseArgs(args);
+        ArgumentParser parser = new ArgumentParser();
+        parser.parseArgs(args);
+        InputVerificator inputVerificator = new InputVerificator(parser.getInputPath(), parser.getOutputPath(), parser.getReportNumber());
 
-        InputVerificator inputVerificator = new InputVerificator("inputPath", "outputPath", 1);
-
-        String inputFilePath = "";
         try {
-            inputFilePath = inputVerificator.veriftyParameters();
-        } catch (IllegalArgumentException e) {
-            exitOnError("Niepoprawne argumenty wywołania");
+            inputVerificator.verifyParameters();
+            Operator operator = new Operator(inputVerificator.getInputPath(), inputVerificator.getOutputPath(), inputVerificator.getReportNumber());
+            operator.runReport();
+        } catch(IllegalArgumentException e) {
+            log.error(e);
         }
-        System.out.println("Input will be taken from: " + inputFilePath);
-
-        boolean xlsDirectoryExists = FileSearcher.checkIfDirectoryExist(xlsPath);
-        if (!xlsDirectoryExists) {
-            exitOnError("Directory" + xlsPath + " doesn't exist!");
-        }
-
-        System.out.println("Searching for xls in path: " + xlsPath);
-        Collection<File> xlsFiles = FileSearcher.getXlsFiles(xlsPath);
-
-        if (xlsFiles.size() == 0) {
-            exitOnError("No files found.");
-        }
-
-        Entry entry = new Entry(LocalDate.MAX, "Projekt", "taskname", 3.14, "user");
-        List<Entry> entryList = new LinkedList<>();
-        entryList.add(entry);
-        ReportV1 reportV1 = new ReportV1(entryList);
-//        reportV1.exportToExcel();
-
     }
 
     public static void exitOnError(String errorMessage) {
