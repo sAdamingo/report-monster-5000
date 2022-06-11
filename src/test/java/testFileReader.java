@@ -57,7 +57,7 @@ public class testFileReader {
         FileReader fr = new FileReader();
         List<Entry> entries = fr.parseXLS("src/test/resources/test_bledy.xls");
         Entry entry = entries.get(1);
-        assertEquals(3, entries.size());
+        assertEquals(4, entries.size());
 
     }
 

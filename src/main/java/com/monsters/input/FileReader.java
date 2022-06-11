@@ -62,12 +62,19 @@ public class FileReader {
         LocalDate date = tempDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         String project = currentSheet.getSheetName();
-        String taskName = row.getCell(1).getStringCellValue();
+        String taskName = validateTaskName(row);
         Double duration = row.getCell(2).getNumericCellValue();
 
         Entry entry = new Entry(date, project, taskName, duration, user);
         log.info("Created entry: " + entry.toString());
         return entry;
+    }
+
+    private String validateTaskName(Row row) {
+        if(row.getCell(1) == null || row.getCell(1).getCellType() == CellType.BLANK){
+            return "NO DATA";
+        }
+        return row.getCell(1).getStringCellValue();
     }
 
     private String getUserName(String filePath) {
