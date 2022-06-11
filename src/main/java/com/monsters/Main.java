@@ -6,6 +6,7 @@ import com.monsters.util.FileSearcher;
 
 
 import com.monsters.util.ArgumentParser;
+import com.monsters.util.InputVerificator;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -23,6 +24,14 @@ public class Main {
         System.out.println("Welcome to REPORT MONSTER 5000!!!!1!");
 
         String xlsPath = ArgumentParser.parseArgs(args);
+
+        InputVerificator inputVerificator = new InputVerificator("inputPath", "outputPath", 1);
+
+        try {
+            inputVerificator.veriftyInput();
+        } catch (IllegalArgumentException e) {
+            exitOnError("Niepoprawne argumenty wywołania");
+        }
 
         boolean xlsDirectoryExists = FileSearcher.checkIfDirectoryExist(xlsPath);
         if (!xlsDirectoryExists) {
