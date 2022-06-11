@@ -1,35 +1,41 @@
 package com.monsters;
 
-import org.apache.commons.cli.*;
+import com.monsters.util.FileSearcher;
+
+
+import com.monsters.util.ArgumentParser;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.util.Collection;
 
 public class Main {
+    private static final Logger log = Logger.getLogger(Main.class.getName());
+
     public static void main(String[] args) {
+        log.info("App Startup");
 
         System.out.println("Welcome to REPORT MONSTER 5000!!!!1!");
 
-        Options options = new Options();
+        String xlsPath = ArgumentParser.parseArgs(args);
 
-        CommandLineParser parser = new DefaultParser();
-        CommandLine cmd = null;
-        try {
-            cmd = parser.parse(options, args);
-        } catch (ParseException e) {
-            System.err.println("Parsing failed.  Reason: " + e.getMessage());
-            HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("report FILE_PATH", options);
-        }
-
-        String xlsPath = null;
-        try {
-            xlsPath = cmd.getArgList().get(0);
-        } catch (Exception e) {
-            System.err.println("Parsing failed.  Reason: " + e.getMessage());
-            HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("report FILE_PATH", options);
+        boolean xlsDirectoryExists = FileSearcher.checkIfDirectoryExist(xlsPath);
+        if (!xlsDirectoryExists) {
+            exitOnError("Directory" + xlsPath + " doesn't exist!");
         }
 
         System.out.println("Searching for xls in path: " + xlsPath);
+        Collection<File> xlsFiles = FileSearcher.getXlsFiles(xlsPath);
 
+        if (xlsFiles.size() == 0) {
+            exitOnError("No files found.");
+        }
+
+    }
+
+    public static void exitOnError(String errorMessage) {
+        System.err.println(errorMessage);
+        System.exit(1);
     }
     
 }

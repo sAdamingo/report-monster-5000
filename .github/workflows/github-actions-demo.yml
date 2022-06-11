@@ -1,0 +1,19 @@
+name: CI for report-monster-5000
+on: [push]
+jobs:
+  test:
+    name: Unit tests
+    strategy:
+      matrix:
+        os: [ macos-latest, windows-latest, ubuntu-latest]
+        javaversion: [ 8, 11, 13, 15 ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Test
+        run: mvn test
