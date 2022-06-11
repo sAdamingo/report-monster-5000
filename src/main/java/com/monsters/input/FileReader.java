@@ -20,53 +20,59 @@ import java.util.List;
 
 
 public class FileReader {
-    private Path path;
-    private List<Entry> entries;
 
     public List<Entry> parseXLS(String filePath) {
 
-        String user = filePath.substring(filePath.lastIndexOf("/") + 1).replace(".xls", "").replace("_", " ");
-
-
-        InputStream is = getFileInputStream(filePath);
+        String user = getUserName(filePath);
+        InputStream inputStream = getFileInputStream(filePath);
         List<Entry> entryList = new ArrayList<>();
+        HSSFWorkbook workbook = null;
 
-        HSSFWorkbook wb = null;
         try {
-            wb = new HSSFWorkbook(is);
+            workbook = new HSSFWorkbook(inputStream);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        int sheets = wb.getNumberOfSheets();
-        for (int i = 0; i < sheets; i++) {
+        int numberOfSheets = workbook.getNumberOfSheets();
+        for (int i = 0; i < numberOfSheets; i++) {
 
-            HSSFSheet sheet = wb.getSheetAt(i);
-            Iterator<Row> rowIterator = sheet.rowIterator();
-
-            rowIterator.next(); //nie bież pod uwagę pierwszego wiersza
+            HSSFSheet currentSheet = workbook.getSheetAt(i);
+            Iterator<Row> rowIterator = currentSheet.rowIterator();
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                if (row.getCell(0) != null && row.getCell(0).getCellType() != CellType.BLANK) {
-
-                    List<String> rowValues = new ArrayList<>();
-
-                    Date date = row.getCell(0).getDateCellValue();
-                    LocalDate dt = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-                    String project = sheet.getSheetName();
-                    String taskName = row.getCell(1).getStringCellValue();
-                    Double duration = row.getCell(2).getNumericCellValue();
-                    String userName = user;
-
-                    Entry entry = new Entry(dt, project, taskName, duration, userName);
+                if (validateEntryData(row)) {
+                    Entry entry = getEntry(user, currentSheet, row);
                     entryList.add(entry);
                 }
             }
         }
         return entryList;
+    }
+
+    private boolean validateEntryData(Row row) {
+        return row.getCell(0) != null && row.getCell(0).getCellType() != CellType.BLANK && !row.getCell(0).toString().equals("Data");
+    }
+
+    private Entry getEntry(String user, HSSFSheet currentSheet, Row row) {
+        Date tempDate = row.getCell(0).getDateCellValue();
+        LocalDate date = tempDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        String project = currentSheet.getSheetName();
+        String taskName = row.getCell(1).getStringCellValue();
+        Double duration = row.getCell(2).getNumericCellValue();
+
+        Entry entry = new Entry(date, project, taskName, duration, user);
+        return entry;
+    }
+
+    private String getUserName(String filePath) {
+        String user = filePath.substring(filePath.lastIndexOf("/") + 1)
+                .replace(".xls", "")
+                .replace("_", " ");
+        return user;
     }
 
     private InputStream getFileInputStream(String filePath) {
