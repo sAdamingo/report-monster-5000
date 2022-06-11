@@ -38,6 +38,7 @@ public class Main {
 
         Entry entry = new Entry(LocalDate.MAX, "Projekt", "taskname", 3.14, "user");
         List<Entry> entryList = new LinkedList<>();
+        entryList.add(entry);
         ReportV1 reportV1 = new ReportV1(entryList);
         reportV1.exportToExcel();
 
