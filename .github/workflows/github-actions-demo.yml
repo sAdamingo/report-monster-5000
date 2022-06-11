@@ -3,7 +3,11 @@ on: [push]
 jobs:
   test:
     name: Unit tests
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ macos-latest, windows-latest, ubuntu-latest]
+        javaversion: [ 8, 11, 13, 15 ]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
