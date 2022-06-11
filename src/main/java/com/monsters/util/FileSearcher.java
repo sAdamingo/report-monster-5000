@@ -6,9 +6,18 @@ import org.apache.commons.io.filefilter.RegexFileFilter;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 
 public class FileSearcher {
+
+    public static boolean checkIfDirectoryExist(String strPath) {
+        Path path = FileSystems.getDefault().getPath(strPath);
+        return Files.exists(path);
+    }
+
     public static Collection<File> findFilesWithExtenstion(String extension, String path) {
         File dir = new File(path);
 
