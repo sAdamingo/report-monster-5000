@@ -27,13 +27,13 @@ public class Main {
 
         InputVerificator inputVerificator = new InputVerificator("inputPath", "outputPath", 1);
 
-        String outputFilePath = "";
+        String inputFilePath = "";
         try {
-            outputFilePath = inputVerificator.veriftyParameters();
+            inputFilePath = inputVerificator.veriftyParameters();
         } catch (IllegalArgumentException e) {
             exitOnError("Niepoprawne argumenty wywołania");
         }
-        System.out.println("Output will be in: " + outputFilePath);
+        System.out.println("Input will be taken from: " + inputFilePath);
 
         boolean xlsDirectoryExists = FileSearcher.checkIfDirectoryExist(xlsPath);
         if (!xlsDirectoryExists) {
