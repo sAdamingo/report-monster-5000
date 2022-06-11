@@ -1,15 +1,19 @@
 package com.monsters;
 
 import com.monsters.util.FileSearcher;
-import org.apache.commons.cli.*;
+
 
 import com.monsters.util.ArgumentParser;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.Collection;
 
 public class Main {
+    private static final Logger log = Logger.getLogger(Main.class.getName());
+
     public static void main(String[] args) {
+        log.info("App Startup");
 
         System.out.println("Welcome to REPORT MONSTER 5000!!!!1!");
 
