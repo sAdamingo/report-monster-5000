@@ -16,20 +16,27 @@ public class Main {
         log.info("App Startup");
 
         System.out.println("Welcome to REPORT MONSTER 5000!!!!1!");
+        ArgumentParser parser = new ArgumentParser();
+        parser.parseArgs(args);
 
-        String xlsPath = ArgumentParser.parseArgs(args);
 
-        boolean xlsDirectoryExists = FileSearcher.checkIfDirectoryExist(xlsPath);
-        if (!xlsDirectoryExists) {
-            exitOnError("Directory" + xlsPath + " doesn't exist!");
-        }
+        System.out.println(parser.getInputPath());
+        System.out.println(parser.getOutputPath());
+        System.out.println(parser.getReportNumber());
 
-        System.out.println("Searching for xls in path: " + xlsPath);
-        Collection<File> xlsFiles = FileSearcher.getXlsFiles(xlsPath);
-
-        if (xlsFiles.size() == 0) {
-            exitOnError("No files found.");
-        }
+//        String xlsPath = parser.parseArgs(args);
+//
+//        boolean xlsDirectoryExists = FileSearcher.checkIfDirectoryExist(xlsPath);
+//        if (!xlsDirectoryExists) {
+//            exitOnError("Directory" + xlsPath + " doesn't exist!");
+//        }
+//
+//        System.out.println("Searching for xls in path: " + xlsPath);
+//        Collection<File> xlsFiles = FileSearcher.getXlsFiles(xlsPath);
+//
+//        if (xlsFiles.size() == 0) {
+//            exitOnError("No files found.");
+//        }
 
     }
 
