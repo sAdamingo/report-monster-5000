@@ -42,7 +42,7 @@ public class InputVerificator {
     /*
         Returns correct outputPath or throws exception
      */
-    public String veriftyInput() {
+    public String veriftyParameters() {
         if (verifyOutputPath() && verifyReportNumber()) {
             return verifyInputPath();
         }
