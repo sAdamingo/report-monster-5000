@@ -73,9 +73,7 @@ public class ReportV1 implements Report {
         cell01.setCellValue("Liczba godzin");
 
         int i_row = 1;
-        System.out.println("Stworzylem naglowek tabeli");
         for (Map.Entry<String, Double> entry : mapToPrint.entrySet()) {
-            System.out.println("Tworzę kolejne entry");
             String user = entry.getKey();
             Double hours = entry.getValue();
 
