@@ -11,6 +11,10 @@ import java.util.List;
 public class ReportV1 implements Report{
     List<Entry> entryList;
 
+    public ReportV1(List<Entry> entryList) {
+        this.entryList = entryList;
+    }
+
     HashMap<String, Double> sumEntryList(List<Entry> entryList){
         HashMap<String, Double>summedEntries = new HashMap<>();
         for (Entry entry :entryList ) {
@@ -24,21 +28,28 @@ public class ReportV1 implements Report{
         return summedEntries;
     }
 
-    StringWriter printHashMap(){
+    String printHashMap(HashMap<String, Double>summedEntries){
         String keyHeader = "Imie Nazwisko";
-        int maxKey = keyHeader.length();
+//        int maxKey = keyHeader.length();
         String valueHeader = "Liczba godzin";
-        int maxValue = valueHeader.length();
+//        int maxValue = valueHeader.length();
+//
+//        for (String element:summedEntries.keySet()) {
+//            element.
+//        }
+        String result = keyHeader +"|"+valueHeader+"\n";
 
-        for (:
-             ) {
-            
+        for (String element : summedEntries.keySet()) {
+            result = result+element +"|"+summedEntries.get(element).toString()+"\n";
         }
+        return  result;
     }
 
     @Override
     public void exportToConsole() {
-
+        HashMap<String, Double> mapToPrint = sumEntryList(entryList);
+        String stringToPrint = printHashMap(mapToPrint);
+        System.out.println(stringToPrint);
     }
 
     @Override
