@@ -50,12 +50,14 @@ public class ArgumentParser {
                 formatter.printHelp("No imput data. Please check possible options: ", options);
                 return false;
             }
-            if (cmd.hasOption("h") && cmd.getOptions().length > 1) {
-                throw new ParseException("Parameter h can only go alone");
-            } else {
-                HelpFormatter formatter = new HelpFormatter();
-                formatter.printHelp("report FILE_PATH", options);
-                help = true;
+            if (cmd.hasOption("h")) {
+                if (cmd.getOptions().length > 1) {
+                    throw new ParseException("Parameter h can only go alone");
+                } else {
+                    HelpFormatter formatter = new HelpFormatter();
+                    formatter.printHelp("report FILE_PATH", options);
+                    help = true;
+                }
             }
             if (!help) {
                 if (cmd.hasOption("r")) {
