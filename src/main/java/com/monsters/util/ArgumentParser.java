@@ -5,6 +5,7 @@ import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class ArgumentParser {
     private static final Logger log = Logger.getLogger(ArgumentParser.class.getName());
@@ -61,19 +62,43 @@ public class ArgumentParser {
                 this.outputPath = "";
             }
             if (cmd.hasOption("f")) {
-              this.fromDate = cmd.getOptionValue(("f"));
-
+              String date = cmd.getOptionValue(("f"));
+              try {
+                  LocalDate from =  LocalDate.parse(date);
+                  this.fromDate = from;
+              } catch (DateTimeParseException e) {
+                  log.warn("From date badly formatted. – the text to parse should be formatted as follows: \"2007-12-03\"");
+                  this.fromDate = LocalDate.MIN;
+              }
             } else {
-
+                this.fromDate = LocalDate.MIN;
             }
+            if (cmd.hasOption("t")) {
+                String date = cmd.getOptionValue(("t"));
+                try {
+                    LocalDate till =  LocalDate.parse(date);
+                    this.tillDate = till;
+                } catch (DateTimeParseException e) {
+                    log.warn("From date badly formatted. – the text to parse should be formatted as follows: \"2007-12-03\"");
+                    this.tillDate = LocalDate.MAX;
+                }
+            } else {
+                this.fromDate = LocalDate.MAX;
+            }
+
 
         } catch (ParseException e) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("report FILE_PATH", options);
-            Main.exitOnError("Argument parsing failed.  Reason: " + e.getMessage());
+            exitOnError("Argument parsing failed.  Reason: " + e.getMessage());
             return false;
         }
         return true;
+    }
+
+    private void exitOnError(String errorMessage) {
+        System.err.println(errorMessage);
+        System.exit(1);
     }
 
     public String getInputPath() {
@@ -98,5 +123,21 @@ public class ArgumentParser {
 
     public void setReportNumber(int reportNumber) {
         this.reportNumber = reportNumber;
+    }
+
+    public LocalDate getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public LocalDate getTillDate() {
+        return tillDate;
+    }
+
+    public void setTillDate(LocalDate tillDate) {
+        this.tillDate = tillDate;
     }
 }
