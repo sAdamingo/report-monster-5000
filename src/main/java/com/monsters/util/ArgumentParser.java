@@ -10,18 +10,26 @@ public class ArgumentParser {
     String outputPath;
     int reportNumber;
 
-    public void parseArgs(String[] args) {
+    public boolean parseArgs(String[] args) {
         Options options = new Options();
         options.addOption("i", true, "input directory");
         options.addOption("o", true, "output directory");
         options.addOption("h",false,"help");
         options.addOption("r", true, "report type [1-5]");
+        options.addOption("f",true,"Date from which we will filter your data");
+        options.addOption("t",true,"Date to which we will filter your data");
+
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
 
         try {
             cmd = parser.parse(options, args);
+            if (cmd.getOptions().length == 0){
+                HelpFormatter formatter = new HelpFormatter();
+                formatter.printHelp("No imput data. Please check possible options: ", options);
+                return false;
+            }
             if (cmd.hasOption("h") && cmd.getOptions().length > 1) {
                 throw new ParseException("Parameter h can only go alone");
             } else {
@@ -51,8 +59,9 @@ public class ArgumentParser {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("report FILE_PATH", options);
             Main.exitOnError("Argument parsing failed.  Reason: " + e.getMessage());
+            return false;
         }
-
+        return true;
     }
 
     public String getInputPath() {
