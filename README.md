@@ -29,8 +29,13 @@ Apache POI
 5. Wykresy poswięconego czasu wg projektów.
 
 #Parametry wywołania
--
-
+1. -e         Create excel report.
+2. -f <arg>   Date from which we will filter your data
+3. -h         help
+4. -i <arg>   input directory
+5. -o <arg>   output directory
+6. -r <arg>   report type [1-5]
+7. -t <arg>   Date till which we will filter your data
 
 
 
