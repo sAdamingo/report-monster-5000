@@ -19,7 +19,7 @@ public class Operator {
         this.reportNumber = reportNumber;
     }
 
-    public void runReport(){
+    public List<Entry> prepareData(){
         FileSearcher fileSearcher = new FileSearcher();
         FileReader fileReader = new FileReader();
         List<Entry> entries;
@@ -31,8 +31,13 @@ public class Operator {
                 listEntries.add(entry);
             }
         }
+        return listEntries;
+    }
+    public void runReport(){
+
         switch (reportNumber){
             case 1:
+                List<Entry> listEntries = prepareData();
                 ReportV1 reportV1 = new ReportV1(listEntries);
                 reportV1.exportToConsole();
                 reportV1.exportToExcel(outputPath);
