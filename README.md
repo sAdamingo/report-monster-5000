@@ -42,7 +42,7 @@ Apache POI
 # Przykład 
 Wywołanie programu z linii komend: utworzenie raportu excel w domyślnym katalogu, 
 katalog wejściowy /2012, raport nr 1
--e -i /2012 -r 1
+-e -i /2012 -o ./ -r 1
 
 
 # Obsługiwane wyjątki plików wejściowych
