@@ -17,6 +17,8 @@ public class ArgumentParser {
 
     private LocalDate tillDate;
 
+    private boolean exportExcel;
+
     public boolean parseArgs(String[] args) {
         Options options = new Options();
         options.addOption("i", true, "input directory");
@@ -25,6 +27,8 @@ public class ArgumentParser {
         options.addOption("r", true, "report type [1-5]");
         options.addOption("f",true,"Date from which we will filter your data");
         options.addOption("t",true,"Date till which we will filter your data");
+        options.addOption("e",false,"Create excel report");
+
 
 
         CommandLineParser parser = new DefaultParser();
@@ -88,6 +92,11 @@ public class ArgumentParser {
                     }
                 } else {
                     this.fromDate = LocalDate.MAX;
+                }
+                if (cmd.hasOption("e")) {
+                    this.exportExcel = true;
+                } else {
+                    this.exportExcel = false;
                 }
             } else {
                 return false;
