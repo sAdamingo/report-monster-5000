@@ -16,8 +16,16 @@ public class ArgumentParser {
     private LocalDate fromDate;
 
     private LocalDate tillDate;
-
     private boolean exportExcel;
+    public boolean isExportExcel() {
+        return exportExcel;
+    }
+
+    public void setExportExcel(boolean exportExcel) {
+        this.exportExcel = exportExcel;
+    }
+
+
 
     public boolean parseArgs(String[] args) {
         Options options = new Options();

@@ -6,6 +6,8 @@ import com.monsters.util.*;
 
 import org.apache.log4j.Logger;
 
+import java.time.LocalDate;
+
 public class Main {
     private static final Logger log = Logger.getLogger(Main.class.getName());
 
@@ -16,8 +18,12 @@ public class Main {
 
         ArgumentParser parser = new ArgumentParser();
         if (parser.parseArgs(args)) {
-            InputVerificator inputVerificator = new InputVerificator(parser.getInputPath(), parser.getOutputPath(), parser.getReportNumber());
-
+            InputVerificator inputVerificator = new InputVerificator(parser.getInputPath(),
+                    parser.getOutputPath(),
+                    parser.getReportNumber(),
+                    parser.getFromDate(),
+                    parser.getTillDate(),
+                    parser.isExportExcel());
             try {
                 inputVerificator.verifyParameters();
                 Operator operator = new Operator(inputVerificator.getInputPath(), inputVerificator.getOutputPath(), inputVerificator.getReportNumber());
