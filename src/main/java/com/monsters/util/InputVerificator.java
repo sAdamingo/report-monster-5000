@@ -16,13 +16,16 @@ public class InputVerificator {
     private LocalDate toDate;
     private boolean exportExcel;
 
-    public InputVerificator(String inputPath, String outputPath, int reportNumber, LocalDate fromDate, LocalDate toDate, boolean exportExcel) {
+    private boolean exportPDF;
+
+    public InputVerificator(String inputPath, String outputPath, int reportNumber, LocalDate fromDate, LocalDate toDate, boolean exportExcel, boolean exportPDF) {
         this.inputPath = inputPath;
         this.outputPath = outputPath;
         this.reportNumber = reportNumber;
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.exportExcel = exportExcel;
+        this.exportPDF = exportPDF;
     }
 
     private void verifyInputPath() {
@@ -127,5 +130,13 @@ public class InputVerificator {
 
     public void setExportExcel(boolean exportExcel) {
         this.exportExcel = exportExcel;
+    }
+
+    public boolean isExportPDF() {
+        return exportPDF;
+    }
+
+    public void setExportPDF(boolean exportPDF) {
+        this.exportPDF = exportPDF;
     }
 }

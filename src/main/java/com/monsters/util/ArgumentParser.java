@@ -17,6 +17,8 @@ public class ArgumentParser {
 
     private LocalDate tillDate;
     private boolean exportExcel;
+    private boolean exportPDF;
+
     public boolean isExportExcel() {
         return exportExcel;
     }
@@ -36,6 +38,7 @@ public class ArgumentParser {
         options.addOption("f",true,"Date from which we will filter your data");
         options.addOption("t",true,"Date till which we will filter your data");
         options.addOption("e",false,"Create excel report");
+        options.addOption("p",false,"Create PDF report");
 
 
 
@@ -108,6 +111,11 @@ public class ArgumentParser {
                 } else {
                     this.exportExcel = false;
                 }
+                if (cmd.hasOption("p")) {
+                    this.exportPDF = true;
+                } else {
+                    this.exportPDF = false;
+                }
             } else {
                 return false;
             }
@@ -164,5 +172,13 @@ public class ArgumentParser {
 
     public void setTillDate(LocalDate tillDate) {
         this.tillDate = tillDate;
+    }
+
+    public boolean isExportPDF() {
+        return exportPDF;
+    }
+
+    public void setExportPDF(boolean exportPDF) {
+        this.exportPDF = exportPDF;
     }
 }

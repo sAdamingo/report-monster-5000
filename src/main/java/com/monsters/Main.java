@@ -23,10 +23,11 @@ public class Main {
                     parser.getReportNumber(),
                     parser.getFromDate(),
                     parser.getTillDate(),
-                    parser.isExportExcel());
+                    parser.isExportExcel(),
+                    parser.isExportPDF());
             try {
                 inputVerificator.verifyParameters();
-                Operator operator = new Operator(inputVerificator.getInputPath(), inputVerificator.getOutputPath(), inputVerificator.getReportNumber(),inputVerificator.getFromDate(),inputVerificator.getToDate(),inputVerificator.isExportExcel());
+                Operator operator = new Operator(inputVerificator.getInputPath(), inputVerificator.getOutputPath(), inputVerificator.getReportNumber(),inputVerificator.getFromDate(),inputVerificator.getToDate(),inputVerificator.isExportExcel(), inputVerificator.isExportPDF());
                 operator.runReport();
             } catch(IllegalArgumentException e) {
                 log.error(e);

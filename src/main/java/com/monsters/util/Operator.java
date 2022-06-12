@@ -17,13 +17,16 @@ public class Operator {
     LocalDate to;
     Boolean exportToExcel;
 
-    public Operator(String inputPath, String outputPath, int reportNumber, LocalDate from, LocalDate to, Boolean exportToExcel) {
+    Boolean exportToPDF;
+
+    public Operator(String inputPath, String outputPath, int reportNumber, LocalDate from, LocalDate to, Boolean exportToExcel, Boolean exportToPDF) {
         this.inputPath = inputPath;
         this.outputPath = outputPath;
         this.reportNumber = reportNumber;
         this.to = to;
         this.from = from;
-        this.exportToExcel= exportToExcel;
+        this.exportToExcel = exportToExcel;
+        this.exportToPDF = exportToPDF;
     }
 
     public List<Entry> prepareData(){
