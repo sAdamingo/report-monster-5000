@@ -23,8 +23,8 @@ public class FileReader {
 
     private static final Logger log = Logger.getLogger(FileReader.class);
 
-
     public List<Entry> parseXLS(String filePath, LocalDate from, LocalDate to) {
+
         log.info("Reading file: " + filePath);
 
         String user = getUserName(filePath);
@@ -47,8 +47,8 @@ public class FileReader {
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                if (validateEntryData(row)) {
-                    Entry entry = getEntry(user, currentSheet, row);
+                if (validateEntryData(row) && isDateBetweenDates(row, from, to)) {
+                    Entry entry = createEntry(user, currentSheet, row);
                     entryList.add(entry);
                 }
             }
@@ -56,8 +56,27 @@ public class FileReader {
         return entryList;
     }
 
+    private boolean isDateBetweenDates(Row row, LocalDate from, LocalDate to) {
+        Date tempDate = row.getCell(0).getDateCellValue();
+        LocalDate date = tempDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        if(date.isAfter(from) && date.isBefore(to)){
+            return true;
+        }
+        else{
+            log.info("data is invalid row: "
+                    + row.getRowNum()
+                    + " date should be between "
+                    + from + " " + to + " was: "
+                    + date );
+            return false;
+        }
+    }
+
     private boolean validateEntryData(Row row) {
-        if (row.getCell(0) != null && row.getCell(0).getCellType() != CellType.BLANK && !row.getCell(0).toString().equals("Data")) {
+        if (row.getCell(0) != null
+                && row.getCell(0).getCellType() != CellType.BLANK
+                && !row.getCell(0).toString().equals("Data")) {
             return true;
         } else {
             log.info("Found empty row");
@@ -65,9 +84,10 @@ public class FileReader {
         }
     }
 
-    private Entry getEntry(String user, HSSFSheet currentSheet, Row row) {
+    private Entry createEntry(String user, HSSFSheet currentSheet, Row row) {
         Date tempDate = row.getCell(0).getDateCellValue();
         LocalDate date = tempDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
 
         String project = currentSheet.getSheetName();
         String taskName = validateTaskName(row);

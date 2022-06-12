@@ -8,28 +8,32 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class testFileReader {
+public class testFileReader_correctData {
 
     public final String path = "src/test/resources/test_tes3e.xls";
     public List<Entry> entityList;
     public Entry entry;
+    LocalDate from;
+    LocalDate to;
+
 
     @BeforeEach
     public void setUp(){
         FileReader fr = new FileReader();
-        entityList= fr.parseXLS(path);
+        from = LocalDate.of(2000,1,1);
+        to = LocalDate.now();
+        entityList= fr.parseXLS(path,from,to);
         entry = entityList.get(0);
     }
 
     @Test
     public void canReadTaskName(){
-
-        assertTrue(entry.getTaskName().equals("pierwszy task"));
+        assertEquals(entry.getTaskName(),("pierwszy task"));
     }
 
     @Test
     public void canReadData(){
-        assertTrue(LocalDate.of(2012,01,05).equals(entry.getDate()));
+        assertEquals(LocalDate.of(2012,01,05),(entry.getDate()));
     }
 
     @Test
@@ -52,22 +56,8 @@ public class testFileReader {
         assertEquals(2,entityList.size());
     }
 
-    @Test
-    public void fileWithErorrs_3Entries(){
-        FileReader fr = new FileReader();
-        List<Entry> entries = fr.parseXLS("src/test/resources/test_bledy.xls");
-        Entry entry = entries.get(1);
-        assertEquals(4, entries.size());
 
-    }
 
-    @Test
-    public void canReadSecondEntry_fromFileWithErrors(){
-        FileReader fr = new FileReader();
-        List<Entry> entries = fr.parseXLS("src/test/resources/test_bledy.xls");
-        Entry entry = entries.get(1);
-        assertEquals("drugi task", entry.getTaskName());
-    }
 
 
 
