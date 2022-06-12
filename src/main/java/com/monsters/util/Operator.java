@@ -13,17 +13,17 @@ public class Operator {
     String inputPath;
     String outputPath;
     int reportNumber;
-
     LocalDate from;
-
     LocalDate to;
+    Boolean exportToExcel;
 
-    public Operator(String inputPath, String outputPath, int reportNumber, LocalDate from, LocalDate to) {
+    public Operator(String inputPath, String outputPath, int reportNumber, LocalDate from, LocalDate to, Boolean exportToExcel) {
         this.inputPath = inputPath;
         this.outputPath = outputPath;
         this.reportNumber = reportNumber;
         this.to = to;
         this.from = from;
+        this.exportToExcel= exportToExcel;
     }
 
     public List<Entry> prepareData(){
@@ -47,25 +47,33 @@ public class Operator {
                 listEntries = prepareData();
                 ReportV1 reportV1 = new ReportV1(listEntries);
                 reportV1.exportToConsole();
-                reportV1.exportToExcel(outputPath);
+                if (exportToExcel){
+                    reportV1.exportToExcel(outputPath);
+                }
                 break;
             case 2:
                 listEntries = prepareData();
                 ReportV2 reportV2 = new ReportV2(listEntries);
                 reportV2.exportToConsole();
-                reportV2.exportToExcel(outputPath);
+                if (exportToExcel){
+                    reportV2.exportToExcel(outputPath);
+                }
                 break;
             case 3:
                 listEntries = prepareData();
                 ReportV3 reportV3 = new ReportV3(listEntries);
                 reportV3.exportToConsole();
-                reportV3.exportToExcel(outputPath);
+                if (exportToExcel){
+                    reportV3.exportToExcel(outputPath);
+                }
                 break;
             case 4:
                 listEntries = prepareData();
                 ReportV4 reportV4 = new ReportV4(listEntries);
                 reportV4.exportToConsole();
-                reportV4.exportToExcel(outputPath);
+                if (exportToExcel){
+                    reportV4.exportToExcel(outputPath);
+                }
                 break;
             case 5:
                 listEntries = prepareData();
