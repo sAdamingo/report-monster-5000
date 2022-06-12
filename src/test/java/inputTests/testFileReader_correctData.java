@@ -1,3 +1,5 @@
+package inputTests;
+
 import com.monsters.input.FileReader;
 import com.monsters.util.Entry;
 import org.junit.jupiter.api.BeforeEach;
