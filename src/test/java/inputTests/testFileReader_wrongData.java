@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class testFileReader_wrongData {
 
     public final String path = "src/test/resources/test_bledy.xls";
-    public List<Entry> entityList;
+    public List<Entry> entryList;
     public Entry entry;
     LocalDate from;
     LocalDate to;
@@ -23,24 +23,19 @@ public class testFileReader_wrongData {
         FileReader fr = new FileReader();
         from = LocalDate.of(2000,1,1);
         to = LocalDate.now();
-        entityList= fr.parseXLS(path,from,to);
-        entry = entityList.get(0);
+        entryList = fr.parseXLS(path,from,to);
+        entry = entryList.get(0);
     }
 
     @Test
     public void fileWithErorrs_3Entries(){
-        FileReader fr = new FileReader();
-        List<Entry> entries = fr.parseXLS(path,from,to);
-        assertEquals(4, entries.size());
+        assertEquals(4, entryList.size());
     }
 
     @Test
     public void canReadSecondEntry_fromFileWithErrors(){
-        FileReader fr = new FileReader();
-        List<Entry> entries = fr.parseXLS("src/test/resources/test_bledy.xls",from,to);
-        Entry entry = entries.get(1);
-        assertEquals("drugi task", entry.getTaskName());
+        Entry entry2 = entryList.get(1);
+        assertEquals("drugi task", entry2.getTaskName());
     }
-
 
 }

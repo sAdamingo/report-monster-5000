@@ -58,9 +58,4 @@ public class testFileReader_correctData {
         assertEquals(2,entityList.size());
     }
 
-
-
-
-
-
 }
