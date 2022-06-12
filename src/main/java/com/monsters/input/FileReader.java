@@ -22,7 +22,9 @@ public class FileReader {
 
     private static final Logger log = Logger.getLogger(FileReader.class);
 
+
     public List<Entry> parseXLS(String filePath) {
+        log.info("Reading file: " + filePath);
 
         String user = getUserName(filePath);
         InputStream inputStream = getFileInputStream(filePath);
@@ -54,7 +56,13 @@ public class FileReader {
     }
 
     private boolean validateEntryData(Row row) {
-        return row.getCell(0) != null && row.getCell(0).getCellType() != CellType.BLANK && !row.getCell(0).toString().equals("Data");
+        if(row.getCell(0) != null && row.getCell(0).getCellType() != CellType.BLANK && !row.getCell(0).toString().equals("Data")){
+            return true;
+        }
+        else{
+            log.info("Found empty row");
+            return false;
+        }
     }
 
     private Entry getEntry(String user, HSSFSheet currentSheet, Row row) {
@@ -72,6 +80,7 @@ public class FileReader {
 
     private String validateTaskName(Row row) {
         if(row.getCell(1) == null || row.getCell(1).getCellType() == CellType.BLANK){
+            log.info("found no data in row " + (row.getRowNum()+1));
             return "NO DATA";
         }
         return row.getCell(1).getStringCellValue();
