@@ -3,11 +3,15 @@ package com.monsters.output;
 import com.monsters.util.Entry;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.knowm.xchart.*;
+import org.knowm.xchart.style.Styler;
+import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ReportV1 implements Report {
     List<Entry> entryList;
@@ -63,7 +67,7 @@ public class ReportV1 implements Report {
     public void exportToExcel(String outputPath) {
         HashMap<String, Double> mapToPrint = sumEntryList(entryList);
 
-
+        createChart();
         Workbook wb = new HSSFWorkbook();
         CreationHelper createHelper = wb.getCreationHelper();
         Sheet sheet = wb.createSheet("report_1");
@@ -101,6 +105,46 @@ public class ReportV1 implements Report {
 
     @Override
     public void exportToPDF() {
+
+    }
+
+    @Override
+    public void createChart() {
+        CategoryChart chart = getChart();
+        new SwingWrapper<CategoryChart>(chart).displayChart();
+    }
+
+     CategoryChart getChart() {
+
+        // Create Chart
+        CategoryChart chart = new CategoryChartBuilder().width(800).height(600).title("Employees Report").xAxisTitle("Employee").yAxisTitle("Hours").build();
+
+        // Customize Chart
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
+        chart.getStyler().setHasAnnotations(true);
+         HashMap<String, Double> stringDoubleHashMap = sumEntryList(entryList);
+         // Series
+         int[] number = new int[stringDoubleHashMap.size()];
+         ArrayList<String> names = new ArrayList<>();
+         ArrayList<Double> hours = new ArrayList<>();
+
+         stringDoubleHashMap.forEach(
+                 (l,m) -> {
+                     names.add(l);
+                     hours.add(m);
+                 }
+         );
+
+
+        chart.addSeries("Report",names,hours);
+
+         try {
+             BitmapEncoder.saveBitmap(chart, "./Sample_Chart", BitmapEncoder.BitmapFormat.PNG);
+         } catch (IOException e) {
+             throw new RuntimeException(e);
+         }
+
+         return chart;
 
     }
 

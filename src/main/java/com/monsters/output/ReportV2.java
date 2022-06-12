@@ -108,4 +108,9 @@ public class ReportV2 implements Report {
     public void exportToPDF() {
 
     }
+
+    @Override
+    public void createChart() {
+
+    }
 }

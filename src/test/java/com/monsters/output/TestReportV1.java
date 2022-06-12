@@ -61,5 +61,7 @@ public class TestReportV1 {
       ReportV1 reportV1=new ReportV1(entryList);
 
       reportV1.exportToConsole();
+      reportV1.createChart();
    }
+
 }
