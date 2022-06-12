@@ -13,6 +13,8 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ReportV1 implements Report {
     private static final Logger log = Logger.getLogger(ReportV1.class.getName());
@@ -37,7 +39,7 @@ public class ReportV1 implements Report {
     }
 
     String printHashMap(HashMap<String, Double> summedEntries) {
-        String keyHeader = "Imie Nazwisko";
+        String keyHeader = "Nazwisko Imie";
         int maxKey = keyHeader.length();
         String valueHeader = "Liczba godzin";
         int maxValue = valueHeader.length();
