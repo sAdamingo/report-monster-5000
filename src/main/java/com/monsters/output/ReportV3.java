@@ -25,11 +25,6 @@ public class ReportV3 implements Report {
     }
 
     HashMap<String, HashMap<String, Double>> sumEntryList(List<Entry> entryList) {
-
-
-        List<String> users = entryList.stream().map(e -> e.getUser()).distinct().collect(Collectors.toList());
-        List<String> projects = entryList.stream().map(e -> e.getProject()).distinct().collect(Collectors.toList());
-
         HashMap<String, HashMap<String, Double>> summedEntries = new HashMap<>();
 
         for (Entry entry : entryList) {

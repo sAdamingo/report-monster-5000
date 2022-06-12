@@ -78,6 +78,10 @@ public class Operator {
             case 5:
                 listEntries = prepareData();
                 ReportV5 reportV5 = new ReportV5(listEntries);
+                reportV5.exportToConsole();
+                if (exportToExcel){
+                    reportV5.exportToExcel(outputPath);
+                }
                 reportV5.generateChart();
                 break;
             default:
