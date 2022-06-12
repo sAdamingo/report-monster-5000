@@ -122,10 +122,10 @@ public class ReportV1 implements Report {
         Sheet sheet = wb.createSheet("report_1");
         Drawing drawing = (Drawing) sheet.createDrawingPatriarch();
         HSSFClientAnchor clientAnchor = new HSSFClientAnchor();
-        clientAnchor.setCol1(10);
-        clientAnchor.setCol2(20);
+        clientAnchor.setCol1(5);
+        clientAnchor.setCol2(15);
         clientAnchor.setRow1(0);
-        clientAnchor.setRow2(10);
+        clientAnchor.setRow2(20);
         drawing.createPicture(clientAnchor, inputImagePicture);
         return sheet;
     }
