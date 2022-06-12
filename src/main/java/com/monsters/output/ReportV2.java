@@ -137,7 +137,7 @@ public class ReportV2 implements Report {
     CategoryChart getChart() {
 
         // Create Chart
-        CategoryChart chart = new CategoryChartBuilder().width(800).height(600).title("Employees Report").xAxisTitle("Employee").yAxisTitle("Hours").build();
+        CategoryChart chart = new CategoryChartBuilder().width(800).height(600).title("Project Report").xAxisTitle("Project").yAxisTitle("Hours").build();
 
         // Customize Chart
         chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
@@ -173,13 +173,13 @@ public class ReportV2 implements Report {
         createChart();
         int inputImagePicture = wb.addPicture(createChart(), Workbook.PICTURE_TYPE_PNG);
         CreationHelper createHelper = wb.getCreationHelper();
-        Sheet sheet = wb.createSheet("report_1");
+        Sheet sheet = wb.createSheet("report_2");
         Drawing drawing = (Drawing) sheet.createDrawingPatriarch();
         HSSFClientAnchor clientAnchor = new HSSFClientAnchor();
-        clientAnchor.setCol1(10);
-        clientAnchor.setCol2(20);
+        clientAnchor.setCol1(5);
+        clientAnchor.setCol2(15);
         clientAnchor.setRow1(0);
-        clientAnchor.setRow2(10);
+        clientAnchor.setRow2(30);
         drawing.createPicture(clientAnchor, inputImagePicture);
         return sheet;
     }
