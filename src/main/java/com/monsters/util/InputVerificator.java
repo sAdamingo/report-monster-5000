@@ -59,22 +59,6 @@ public class InputVerificator {
         return false;
     }
 
-    private boolean verifyToDate() {
-        LocalDate today = LocalDate.now();
-        if (this.toDate.isAfter((today)))  {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean verifyFromDate() {
-        LocalDate epochDay = LocalDate.EPOCH;
-        if (this.fromDate.isBefore(epochDay)) {
-            return false;
-        }
-        return true;
-    }
-
     /*
         Returns correct inputPath or throws exception
      */
@@ -85,11 +69,8 @@ public class InputVerificator {
         boolean report = verifyReportNumber();
         if (report) {
             verifyInputPath();
-            boolean fromDate = verifyFromDate();
-            boolean toDate = verifyToDate();
             verifyOutputPath();
-
-            return fromDate && toDate;
+            return true;
         } else {
             log.error("Wrong report type.");
             return false;
