@@ -1,6 +1,5 @@
 package com.monsters.input;
 
-import com.monsters.Main;
 import com.monsters.util.Entry;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -8,8 +7,10 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 
-import java.io.*;
-import java.nio.file.Path;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class FileReader {
     private static final Logger log = Logger.getLogger(FileReader.class);
 
 
-    public List<Entry> parseXLS(String filePath) {
+    public List<Entry> parseXLS(String filePath, LocalDate from, LocalDate to) {
         log.info("Reading file: " + filePath);
 
         String user = getUserName(filePath);
@@ -56,10 +57,9 @@ public class FileReader {
     }
 
     private boolean validateEntryData(Row row) {
-        if(row.getCell(0) != null && row.getCell(0).getCellType() != CellType.BLANK && !row.getCell(0).toString().equals("Data")){
+        if (row.getCell(0) != null && row.getCell(0).getCellType() != CellType.BLANK && !row.getCell(0).toString().equals("Data")) {
             return true;
-        }
-        else{
+        } else {
             log.info("Found empty row");
             return false;
         }
@@ -79,8 +79,8 @@ public class FileReader {
     }
 
     private String validateTaskName(Row row) {
-        if(row.getCell(1) == null || row.getCell(1).getCellType() == CellType.BLANK){
-            log.info("found no data in row " + (row.getRowNum()+1));
+        if (row.getCell(1) == null || row.getCell(1).getCellType() == CellType.BLANK) {
+            log.info("found no data in row " + (row.getRowNum() + 1));
             return "NO DATA";
         }
         return row.getCell(1).getStringCellValue();
