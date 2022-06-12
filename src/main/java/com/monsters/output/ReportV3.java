@@ -1,6 +1,7 @@
 package com.monsters.output;
 
 import com.monsters.util.Entry;
+import com.monsters.util.OurDateTimeFormatter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
@@ -132,7 +133,8 @@ public class ReportV3 implements Report {
             }
 
         }
-        Path path = Paths.get(outputPath, "report_3.xls");
+        OurDateTimeFormatter ourDateTimeFormatter = new OurDateTimeFormatter();
+        Path path = Paths.get(outputPath, "report_3_"+ourDateTimeFormatter.getFormattedDateTime()+".xls");
         try  (OutputStream fileOut = new FileOutputStream(String.valueOf(path))) {
             wb.write(fileOut);
         } catch (FileNotFoundException e) {
