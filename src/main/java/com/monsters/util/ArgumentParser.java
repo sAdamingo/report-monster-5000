@@ -101,7 +101,7 @@ public class ArgumentParser {
                         this.tillDate = LocalDate.MAX;
                     }
                 } else {
-                    this.fromDate = LocalDate.MAX;
+                    this.tillDate = LocalDate.MAX;
                 }
                 if (cmd.hasOption("e")) {
                     this.exportExcel = true;
