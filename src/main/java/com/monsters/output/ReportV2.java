@@ -2,6 +2,7 @@ package com.monsters.output;
 
 import com.monsters.util.Entry;
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.knowm.xchart.BitmapEncoder;
@@ -79,8 +80,10 @@ public class ReportV2 implements Report {
 
 
         Workbook wb = new HSSFWorkbook();
+        Sheet sheet = addChart(wb);
+
+
         CreationHelper createHelper = wb.getCreationHelper();
-        Sheet sheet = wb.createSheet("report_2");
 
         Row row0 = sheet.createRow(0);
         Cell cell00 = row0.createCell(0);
@@ -134,7 +137,7 @@ public class ReportV2 implements Report {
     CategoryChart getChart() {
 
         // Create Chart
-        CategoryChart chart = new CategoryChartBuilder().width(800).height(600).title("Employees Report").xAxisTitle("Employee").yAxisTitle("Hours").build();
+        CategoryChart chart = new CategoryChartBuilder().width(800).height(600).title("Project Report").xAxisTitle("Project").yAxisTitle("Hours").build();
 
         // Customize Chart
         chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
@@ -165,4 +168,20 @@ public class ReportV2 implements Report {
         return chart;
 
     }
+
+    private Sheet addChart(Workbook wb) {
+        createChart();
+        int inputImagePicture = wb.addPicture(createChart(), Workbook.PICTURE_TYPE_PNG);
+        CreationHelper createHelper = wb.getCreationHelper();
+        Sheet sheet = wb.createSheet("report_2");
+        Drawing drawing = (Drawing) sheet.createDrawingPatriarch();
+        HSSFClientAnchor clientAnchor = new HSSFClientAnchor();
+        clientAnchor.setCol1(5);
+        clientAnchor.setCol2(15);
+        clientAnchor.setRow1(0);
+        clientAnchor.setRow2(30);
+        drawing.createPicture(clientAnchor, inputImagePicture);
+        return sheet;
+    }
+
 }
