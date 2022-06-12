@@ -26,7 +26,7 @@ public class Main {
                     parser.isExportExcel());
             try {
                 inputVerificator.verifyParameters();
-                Operator operator = new Operator(inputVerificator.getInputPath(), inputVerificator.getOutputPath(), inputVerificator.getReportNumber());
+                Operator operator = new Operator(inputVerificator.getInputPath(), inputVerificator.getOutputPath(), inputVerificator.getReportNumber(),inputVerificator.getFromDate(),inputVerificator.getToDate());
                 operator.runReport();
             } catch(IllegalArgumentException e) {
                 log.error(e);

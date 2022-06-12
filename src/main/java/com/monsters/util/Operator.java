@@ -14,10 +14,16 @@ public class Operator {
     String outputPath;
     int reportNumber;
 
-    public Operator(String inputPath, String outputPath, int reportNumber) {
+    LocalDate from;
+
+    LocalDate to;
+
+    public Operator(String inputPath, String outputPath, int reportNumber, LocalDate from, LocalDate to) {
         this.inputPath = inputPath;
         this.outputPath = outputPath;
         this.reportNumber = reportNumber;
+        this.to = to;
+        this.from = from;
     }
 
     public List<Entry> prepareData(){
@@ -27,8 +33,6 @@ public class Operator {
         List<Entry> listEntries = new ArrayList<>();
         Collection<File> files = fileSearcher.findFilesWithExtenstion("(.xls)", inputPath);
         for (File file: files ) {
-            LocalDate from = LocalDate.of(2000,1,1);
-            LocalDate to = LocalDate.now();
             entries = fileReader.parseXLS(file.getPath(),from,to);
             for (Entry entry: entries               ) {
                 listEntries.add(entry);
