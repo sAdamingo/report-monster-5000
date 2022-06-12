@@ -2,8 +2,14 @@ package com.monsters.output;
 
 import com.monsters.util.Entry;
 import com.monsters.util.OurDateTimeFormatter;
+import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.style.Styler;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -18,6 +24,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ReportV3 implements Report {
+
+    private static final Logger log = Logger.getLogger(ReportV3.class.getName());
     List<Entry> entryList;
 
     public ReportV3(List<Entry> entryList) {
@@ -95,7 +103,8 @@ public class ReportV3 implements Report {
 
         Workbook wb = new HSSFWorkbook();
         CreationHelper createHelper = wb.getCreationHelper();
-        Sheet sheet = wb.createSheet("report_3");
+        //Sheet sheet = wb.createSheet("report_3");
+        Sheet sheet = addChart(wb);
 
         Row row0 = sheet.createRow(0);
         Cell cell00 = row0.createCell(0);
@@ -146,6 +155,80 @@ public class ReportV3 implements Report {
 
     @Override
     public byte[] createChart() {
-        return new byte[0];
+        CategoryChart chart = getChart();
+        try {
+            return BitmapEncoder.getBitmapBytes(chart, BitmapEncoder.BitmapFormat.PNG);
+        } catch (IOException e) {
+            log.warn("Cannot create a chart");
+            throw new RuntimeException(e);
+        }
+//        new SwingWrapper<CategoryChart>(chart).displayChart();
+    }
+
+    CategoryChart getChart() {
+
+        // Create Chart
+        CategoryChart chart = new CategoryChartBuilder().width(800).height(600).title("Employees Report").xAxisTitle("Employee").yAxisTitle("Hours").theme(Styler.ChartTheme.GGPlot2).build();
+
+        // Customize Chart
+        //       chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
+        //     chart.getStyler().setHasAnnotations(true);
+        HashMap<String, HashMap<String, Double>> stringDoubleHashMap = sumEntryList(entryList);
+        // Series
+        int[] number = new int[stringDoubleHashMap.size()];
+
+        ArrayList<String> project = new ArrayList<>();
+        ArrayList<Double> hours = new ArrayList<>();
+
+        List<String> names = stringDoubleHashMap.entrySet().stream().map(l -> l.getKey()).distinct().collect(Collectors.toList());
+        List<String> distinct = new ArrayList<>();
+        names.forEach( l -> {
+            distinct.addAll(stringDoubleHashMap.get(l).entrySet().stream().map(x -> x.getKey()).distinct().collect(Collectors.toList()));
+        });
+        List<String> distinct2 = distinct.stream().distinct().collect(Collectors.toList());
+
+        names.forEach( l -> {
+            if (stringDoubleHashMap.containsKey(l)) {
+                HashMap<String, Double> stringDoubleHashMap1 = stringDoubleHashMap.get(l);
+                distinct2.forEach( i -> {
+                    if (stringDoubleHashMap1.containsKey(i)) {
+                        project.add(i);
+                        hours.add(stringDoubleHashMap1.get(i));
+                    } else {
+                        project.add(i);
+                        hours.add(0.0);
+                    }
+                });
+            }
+
+            chart.addSeries(l,project,hours);
+            project.clear();
+            hours.clear();
+        });
+
+        try {
+            BitmapEncoder.saveBitmap(chart, "./Sample_Chart", BitmapEncoder.BitmapFormat.PNG);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return chart;
+
+    }
+
+    private Sheet addChart(Workbook wb) {
+        createChart();
+        int inputImagePicture = wb.addPicture(createChart(), Workbook.PICTURE_TYPE_PNG);
+        CreationHelper createHelper = wb.getCreationHelper();
+        Sheet sheet = wb.createSheet("report_1");
+        Drawing drawing = (Drawing) sheet.createDrawingPatriarch();
+        HSSFClientAnchor clientAnchor = new HSSFClientAnchor();
+        clientAnchor.setCol1(5);
+        clientAnchor.setCol2(15);
+        clientAnchor.setRow1(0);
+        clientAnchor.setRow2(30);
+        drawing.createPicture(clientAnchor, inputImagePicture);
+        return sheet;
     }
 }
