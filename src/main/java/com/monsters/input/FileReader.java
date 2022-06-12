@@ -1,15 +1,14 @@
 package com.monsters.input;
 
+import com.monsters.Main;
 import com.monsters.util.Entry;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -20,6 +19,8 @@ import java.util.List;
 
 
 public class FileReader {
+
+    private static final Logger log = Logger.getLogger(FileReader.class);
 
     public List<Entry> parseXLS(String filePath) {
 
@@ -61,11 +62,19 @@ public class FileReader {
         LocalDate date = tempDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         String project = currentSheet.getSheetName();
-        String taskName = row.getCell(1).getStringCellValue();
+        String taskName = validateTaskName(row);
         Double duration = row.getCell(2).getNumericCellValue();
 
         Entry entry = new Entry(date, project, taskName, duration, user);
+        log.info("Created entry: " + entry.toString());
         return entry;
+    }
+
+    private String validateTaskName(Row row) {
+        if(row.getCell(1) == null || row.getCell(1).getCellType() == CellType.BLANK){
+            return "NO DATA";
+        }
+        return row.getCell(1).getStringCellValue();
     }
 
     private String getUserName(String filePath) {

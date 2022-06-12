@@ -34,7 +34,7 @@ public class testFileReader {
 
     @Test
     public void canReadProject(){
-        assertTrue("Projekt1".equals(entry.getProject()));
+        assertEquals("Projekt1",entry.getProject());
     }
 
     @Test
@@ -51,5 +51,24 @@ public class testFileReader {
     public void shouldBe2Entries(){
         assertEquals(2,entityList.size());
     }
+
+    @Test
+    public void fileWithErorrs_3Entries(){
+        FileReader fr = new FileReader();
+        List<Entry> entries = fr.parseXLS("src/test/resources/test_bledy.xls");
+        Entry entry = entries.get(1);
+        assertEquals(4, entries.size());
+
+    }
+
+    @Test
+    public void canReadSecondEntry_fromFileWithErrors(){
+        FileReader fr = new FileReader();
+        List<Entry> entries = fr.parseXLS("src/test/resources/test_bledy.xls");
+        Entry entry = entries.get(1);
+        assertEquals("drugi task", entry.getTaskName());
+    }
+
+
 
 }
