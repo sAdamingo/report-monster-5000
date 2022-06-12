@@ -1,7 +1,7 @@
 package com.monsters.output;
 
 import com.monsters.util.Entry;
-import org.apache.log4j.Logger;
+import com.monsters.util.OurDateTimeFormatter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
@@ -17,8 +17,6 @@ import java.util.Map;
 
 public class ReportV4 implements Report {
     List<Entry> entryList;
-
-    private static final Logger log = Logger.getLogger(ReportV4.class.getName());
 
     public ReportV4(List<Entry> entryList) {
         this.entryList = entryList;
@@ -97,7 +95,8 @@ public class ReportV4 implements Report {
 
             i_row++;
         }
-        Path path = Paths.get(outputPath, "report_4.xls");
+        OurDateTimeFormatter ourDateTimeFormatter = new OurDateTimeFormatter();
+        Path path = Paths.get(outputPath, "report_4_"+ourDateTimeFormatter.getFormattedDateTime()+".xls");
         try  (OutputStream fileOut = new FileOutputStream(String.valueOf(path))) {
             wb.write(fileOut);
         } catch (FileNotFoundException e) {
