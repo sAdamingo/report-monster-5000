@@ -4,11 +4,17 @@ import com.monsters.Main;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
+import java.time.LocalDate;
+
 public class ArgumentParser {
     private static final Logger log = Logger.getLogger(ArgumentParser.class.getName());
-    String inputPath;
-    String outputPath;
-    int reportNumber;
+    private String inputPath;
+     private String outputPath;
+    private int reportNumber;
+
+    private LocalDate fromDate;
+
+    private LocalDate tillDate;
 
     public boolean parseArgs(String[] args) {
         Options options = new Options();
@@ -17,7 +23,7 @@ public class ArgumentParser {
         options.addOption("h",false,"help");
         options.addOption("r", true, "report type [1-5]");
         options.addOption("f",true,"Date from which we will filter your data");
-        options.addOption("t",true,"Date to which we will filter your data");
+        options.addOption("t",true,"Date till which we will filter your data");
 
 
         CommandLineParser parser = new DefaultParser();
@@ -53,6 +59,12 @@ public class ArgumentParser {
                 this.outputPath = cmd.getOptionValue("o");
             } else {
                 this.outputPath = "";
+            }
+            if (cmd.hasOption("f")) {
+              this.fromDate = cmd.getOptionValue(("f"));
+
+            } else {
+
             }
 
         } catch (ParseException e) {
