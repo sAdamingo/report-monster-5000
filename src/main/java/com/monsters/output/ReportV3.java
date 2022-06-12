@@ -105,14 +105,14 @@ public class ReportV3 implements Report {
         Cell cell00 = row0.createCell(0);
         cell00.setCellValue("Nazwisko Imie");
         Cell cell01 = row0.createCell(1);
-        cell00.setCellValue("Projekt");
+        cell01.setCellValue("Projekt");
         Cell cell02 = row0.createCell(2);
-        cell01.setCellValue("Liczba godzin");
+        cell02.setCellValue("Liczba godzin");
 
         int i_row = 1;
 
         for (Map.Entry<String, HashMap<String, Double>> entry : mapToPrint.entrySet()) {
-            HashMap<String, Double> internalEntries = mapToPrint.get(entry);
+            HashMap<String, Double> internalEntries = mapToPrint.get(entry.getKey());
             for (Map.Entry<String, Double> entry2 : internalEntries.entrySet()) {
                 String user = entry.getKey();
                 String project = entry2.getKey();
