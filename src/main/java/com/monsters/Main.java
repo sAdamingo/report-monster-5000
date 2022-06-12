@@ -31,6 +31,8 @@ public class Main {
                 operator.runReport();
             } catch(IllegalArgumentException e) {
                 log.error(e);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         } else{
             log.error("Input data not acceptable");
