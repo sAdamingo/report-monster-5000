@@ -32,7 +32,7 @@ public class ReportV1 implements Report {
     }
 
     String printHashMap(HashMap<String, Double> summedEntries) {
-        String keyHeader = "Imie Nazwisko";
+        String keyHeader = "Nazwisko Imie";
         int maxKey = keyHeader.length();
         String valueHeader = "Liczba godzin";
         int maxValue = valueHeader.length();

@@ -1,16 +1,29 @@
 package com.monsters.output;
 
 import com.monsters.util.Entry;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ReportV3 implements Report {
     List<Entry> entryList;
 
-        HashMap<String, HashMap<String, Double>> sumEntryList(List<Entry> entryList) {
+    public ReportV3(List<Entry> entryList) {
+        this.entryList = entryList;
+    }
+
+    HashMap<String, HashMap<String, Double>> sumEntryList(List<Entry> entryList) {
 
 
         List<String> users = entryList.stream().map(e -> e.getUser()).distinct().collect(Collectors.toList());
@@ -38,7 +51,7 @@ public class ReportV3 implements Report {
     }
 
     String printHashMap(HashMap<String, HashMap<String, Double>> summedEntries) {
-        String keyHeader = "Imie Nazwisko";
+        String keyHeader = "Nazwisko Imie";
         int maxKey = keyHeader.length();
         String keyHeader2 = "Projekt";
         int maxKey2 = keyHeader2.length();
@@ -81,7 +94,52 @@ public class ReportV3 implements Report {
 
     @Override
     public void exportToExcel(String outputPath) {
+        HashMap<String, HashMap<String, Double>> mapToPrint = sumEntryList(entryList);
 
+
+        Workbook wb = new HSSFWorkbook();
+        CreationHelper createHelper = wb.getCreationHelper();
+        Sheet sheet = wb.createSheet("report_3");
+
+        Row row0 = sheet.createRow(0);
+        Cell cell00 = row0.createCell(0);
+        cell00.setCellValue("Nazwisko Imie");
+        Cell cell01 = row0.createCell(1);
+        cell00.setCellValue("Projekt");
+        Cell cell02 = row0.createCell(2);
+        cell01.setCellValue("Liczba godzin");
+
+        int i_row = 1;
+
+        for (Map.Entry<String, HashMap<String, Double>> entry : mapToPrint.entrySet()) {
+            HashMap<String, Double> internalEntries = mapToPrint.get(entry);
+            for (Map.Entry<String, Double> entry2 : internalEntries.entrySet()) {
+                String user = entry.getKey();
+                String project = entry2.getKey();
+                Double hours = entry2.getValue();
+
+                Row row = sheet.createRow(i_row);
+
+                Cell cellx0 = row.createCell(0);
+                Cell cellx1 = row.createCell(1);
+                Cell cellx2 = row.createCell(2);
+
+                cellx0.setCellValue(user);
+                cellx1.setCellValue(project);
+                cellx2.setCellValue(hours);
+
+                i_row++;
+            }
+
+        }
+        Path path = Paths.get(outputPath, "report_3.xls");
+        try  (OutputStream fileOut = new FileOutputStream(String.valueOf(path))) {
+            wb.write(fileOut);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
