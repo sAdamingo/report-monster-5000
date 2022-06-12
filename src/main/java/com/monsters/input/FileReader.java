@@ -43,7 +43,7 @@ public class FileReader {
         for (int i = 0; i < numberOfSheets; i++) {
 
             HSSFSheet currentSheet = workbook.getSheetAt(i);
-
+            log.info(currentSheet.getSheetName() + " current Sheet Processed");
             if(InputValidator.validateCorrectHeader(currentSheet)){
             Iterator<Row> rowIterator = currentSheet.rowIterator();
 

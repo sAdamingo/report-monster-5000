@@ -40,6 +40,11 @@ public class ReportV5 implements Report {
 
     }
 
+    @Override
+    public byte[] createChart() {
+        return new byte[0];
+    }
+
     public void generateChart() {
         HashMap<String, List<LocalDate>> xDataHashMapListLocalDate = new HashMap<>();
         HashMap<String, List<Double>> yDataHashMapListDouble = new HashMap<>();

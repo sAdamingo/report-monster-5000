@@ -72,11 +72,16 @@ public class InputValidator {
     }
 
     public static boolean validateCorrectHeader(HSSFSheet currentSheet) {
-        Cell dateHeader = currentSheet.getRow(0).getCell(0);
-        Cell taskHeader = currentSheet.getRow(0).getCell(1);
-        Cell durationHeader = currentSheet.getRow(0).getCell(2);
-        return dateHeader.toString().equals("Data")
-                && taskHeader.toString().equals("Zadanie")
-                && durationHeader.toString().equals("Czas [h]");
+        try {
+            Cell dateHeader = currentSheet.getRow(0).getCell(0);
+            Cell taskHeader = currentSheet.getRow(0).getCell(1);
+            Cell durationHeader = currentSheet.getRow(0).getCell(2);
+            return dateHeader.toString().equals("Data")
+                    && taskHeader.toString().equals("Zadanie")
+                    && durationHeader.toString().equals("Czas [h]");
+        } catch (NullPointerException e) {
+            log.error("Input data error in : " + currentSheet.getSheetName() + " one or more headers are empty.");
+            return false;
+        }
     }
 }
