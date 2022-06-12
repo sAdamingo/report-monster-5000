@@ -1,10 +1,7 @@
 package com.monsters.util;
 
 import com.monsters.input.FileReader;
-import com.monsters.output.ReportV1;
-import com.monsters.output.ReportV2;
-import com.monsters.output.ReportV3;
-import com.monsters.output.ReportV4;
+import com.monsters.output.*;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -69,6 +66,11 @@ public class Operator {
                 ReportV4 reportV4 = new ReportV4(listEntries);
                 reportV4.exportToConsole();
                 reportV4.exportToExcel(outputPath);
+                break;
+            case 5:
+                listEntries = prepareData();
+                ReportV5 reportV5 = new ReportV5(listEntries);
+                reportV5.generateChart();
                 break;
             default:
                 System.out.println("report not supported");
