@@ -1,8 +1,13 @@
 package com.monsters.output;
 
 import com.monsters.util.Entry;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.style.Styler;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,12 +15,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ReportV2 implements Report {
     List<Entry> entryList;
+
+    private static final Logger log = Logger.getLogger(ReportV2.class.getName());
+
 
     public ReportV2(List<Entry> entryList) {
         this.entryList = entryList;
@@ -111,6 +120,49 @@ public class ReportV2 implements Report {
 
     @Override
     public byte[] createChart() {
-        return new byte[0];
+        CategoryChart chart = getChart();
+        try {
+            return BitmapEncoder.getBitmapBytes(chart, BitmapEncoder.BitmapFormat.PNG);
+        } catch (IOException e) {
+            log.warn("Cannot create a chart");
+            throw new RuntimeException(e);
+
+        }
+//        new SwingWrapper<CategoryChart>(chart).displayChart();
+    }
+
+    CategoryChart getChart() {
+
+        // Create Chart
+        CategoryChart chart = new CategoryChartBuilder().width(800).height(600).title("Employees Report").xAxisTitle("Employee").yAxisTitle("Hours").build();
+
+        // Customize Chart
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
+        chart.getStyler().setHasAnnotations(true);
+        HashMap<String, Double> stringDoubleHashMap = sumEntryList(entryList);
+        // Series
+        int[] number = new int[stringDoubleHashMap.size()];
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<Double> hours = new ArrayList<>();
+
+        stringDoubleHashMap.forEach(
+                (l,m) -> {
+                    names.add(l);
+                    hours.add(m);
+                }
+        );
+
+
+        chart.addSeries("Report",names,hours);
+
+        try {
+            BitmapEncoder.saveBitmap(chart, "./Sample_Chart", BitmapEncoder.BitmapFormat.PNG);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return chart;
+
     }
 }

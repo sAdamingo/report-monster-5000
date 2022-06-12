@@ -1,6 +1,7 @@
 package com.monsters.output;
 
 import com.monsters.util.Entry;
+import org.apache.log4j.Logger;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
 import org.knowm.xchart.style.colors.ChartColor;
@@ -12,6 +13,9 @@ import java.util.List;
 
 public class ReportV5 implements Report {
     List<Entry> entryList;
+    private static final Logger log = Logger.getLogger(ReportV5.class.getName());
+
+
 
     public ReportV5(List<Entry> entryList) {
         this.entryList = entryList;

@@ -1,6 +1,7 @@
 package com.monsters.output;
 
 import com.monsters.util.Entry;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
@@ -16,6 +17,8 @@ import java.util.Map;
 
 public class ReportV4 implements Report {
     List<Entry> entryList;
+
+    private static final Logger log = Logger.getLogger(ReportV4.class.getName());
 
     public ReportV4(List<Entry> entryList) {
         this.entryList = entryList;
