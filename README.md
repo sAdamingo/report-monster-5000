@@ -5,7 +5,7 @@ ReadMe.txt
 Ver. 1.0.
 11062022
 
-#Opis projektu
+# Opis projektu
 Celem projektu jest przygotowanie prostego narzędzia do raportowania czasu pracy
 spędzonego w projektach przez zaspół programistyczny.
 Dane wejściowe zawierające zarejsetrowane godziny są zaczytywane z plików .xls
@@ -16,19 +16,19 @@ Program generuje syntetyczne raporty, które są wyświetlane w konsoli, moga by
 eksportowane do pliku excel.
 Program posiada bazowa obsługe błędów.
 
-#Technologie
+# Technologie
 Java 11
 Apache Commons CLI
 Apache POI
 
-#Lista raportów
+# Lista raportów
 1. Liczba godzin wg pracowników za dany okres.
 2. Liczba godzin przepracowanych wg projektów za dany okres.
 3. Liczba godzin w poszczególnych projektach wg pracowników za dany okres.
 4. Liczba godzin wg tasków za dany okres.
 5. Wykresy poswięconego czasu wg projektów.
 
-#Parametry wywołania
+# Parametry wywołania
 1. -e         Create excel report.
 2. -f <arg>   Date from which we will filter your data
 3. -h         help
@@ -39,8 +39,10 @@ Apache POI
 
 
 
-#Przykład 
-
+# Przykład 
+Wywołanie programu z linii komend: utworzenie raportu excel w domyślnym katalogu, 
+katalog wejściowy /2012, raport nr 1
+-e -i /2012 -r 1
 
 
 # Obsługiwane wyjątki plików wejściowych
