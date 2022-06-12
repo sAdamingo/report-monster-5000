@@ -85,7 +85,6 @@ public class ReportV2 implements Report {
 
 
         CreationHelper createHelper = wb.getCreationHelper();
-        Sheet sheet = wb.createSheet("report_2");
 
         Row row0 = sheet.createRow(0);
         Cell cell00 = row0.createCell(0);
