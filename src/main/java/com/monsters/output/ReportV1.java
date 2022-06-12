@@ -1,16 +1,24 @@
 package com.monsters.output;
 
+
 import com.monsters.util.Entry;
-import com.monsters.util.InputVerificator;
-import com.monsters.util.OurDateTimeFormatter;
 import org.apache.log4j.Logger;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImage;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
 
+
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -97,8 +105,7 @@ public class ReportV1 implements Report {
 
             i_row++;
         }
-        OurDateTimeFormatter ourDateTimeFormatter = new OurDateTimeFormatter();
-        Path path = Paths.get(outputPath, "report_1_"+ourDateTimeFormatter.getFormattedDateTime()+".xls");
+        Path path = Paths.get(outputPath, "report_1.xls");
         try  (OutputStream fileOut = new FileOutputStream(String.valueOf(path))) {
             wb.write(fileOut);
         } catch (FileNotFoundException e) {
@@ -115,10 +122,10 @@ public class ReportV1 implements Report {
         Sheet sheet = wb.createSheet("report_1");
         Drawing drawing = (Drawing) sheet.createDrawingPatriarch();
         HSSFClientAnchor clientAnchor = new HSSFClientAnchor();
-        clientAnchor.setCol1(5);
-        clientAnchor.setCol2(15);
+        clientAnchor.setCol1(10);
+        clientAnchor.setCol2(20);
         clientAnchor.setRow1(0);
-        clientAnchor.setRow2(30);
+        clientAnchor.setRow2(10);
         drawing.createPicture(clientAnchor, inputImagePicture);
         return sheet;
     }
@@ -126,8 +133,54 @@ public class ReportV1 implements Report {
     @Override
     public void exportToPDF() {
 
+    try(PDDocument doc = new PDDocument()){
+        PDPage page = new PDPage();
+        doc.addPage(page);
+
+        HashMap<String, Double> mapToPrint = sumEntryList(entryList);
+        String stringToPrint = printHashMap(mapToPrint);
+
+
+        try(PDPageContentStream cont = new PDPageContentStream(doc, page)){
+            cont.beginText();
+
+            cont.newLineAtOffset(25, 700);
+            cont.setLeading(14.5f);
+            cont.setFont(PDType1Font.COURIER,12);
+
+
+            String header = "Raport nr 1";
+            cont.showText(header);
+            cont.newLine();
+
+            String header2 = "Nazwisko | Imie";
+            cont.showText(header2);
+
+            HashMap<String, Double> mapPrint = sumEntryList(entryList);
+            mapPrint.forEach((k,v) -> {
+                try {
+                    cont.newLine();
+                    cont.showText(new String(k + " "+ v));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            cont.newLine();
+
+            cont.endText();
+
+            byte[] bytes = createChart();
+            PDImageXObject image = PDImageXObject.createFromByteArray(doc,bytes , "img-filename");
+            cont.drawImage(image,10f,0.5f,400,400);
+        }
+
+        doc.save("outputPDF.pdf");
+    } catch (IOException e) {
+        e.printStackTrace();
     }
 
+    }
     @Override
     public byte[] createChart() {
         CategoryChart chart = getChart();

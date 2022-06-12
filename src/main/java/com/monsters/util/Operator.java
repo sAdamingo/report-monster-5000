@@ -43,7 +43,7 @@ public class Operator {
         }
         return listEntries;
     }
-    public void runReport(){
+    public void runReport() throws InterruptedException {
         List<Entry> listEntries;
         switch (reportNumber){
             case 1:
@@ -52,6 +52,10 @@ public class Operator {
                 reportV1.exportToConsole();
                 if (exportToExcel){
                     reportV1.exportToExcel(outputPath);
+                }
+                if (exportToPDF){
+                    Thread.sleep(100);
+                    reportV1.exportToPDF();
                 }
                 break;
             case 2:
