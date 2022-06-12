@@ -146,4 +146,9 @@ public class ReportV3 implements Report {
     public void exportToPDF() {
 
     }
+
+    @Override
+    public byte[] createChart() {
+        return new byte[0];
+    }
 }
