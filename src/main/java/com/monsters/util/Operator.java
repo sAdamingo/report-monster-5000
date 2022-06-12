@@ -4,6 +4,7 @@ import com.monsters.input.FileReader;
 import com.monsters.output.ReportV1;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,7 +27,9 @@ public class Operator {
         List<Entry> listEntries = new ArrayList<>();
         Collection<File> files = fileSearcher.findFilesWithExtenstion("(.xls)", inputPath);
         for (File file: files ) {
-            entries = fileReader.parseXLS(file.getPath());
+            LocalDate from = LocalDate.of(2000,1,1);
+            LocalDate to = LocalDate.now();
+            entries = fileReader.parseXLS(file.getPath(),from,to);
             for (Entry entry: entries               ) {
                 listEntries.add(entry);
             }
