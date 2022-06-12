@@ -30,18 +30,18 @@ Apache POI
 
 # Parametry wywołania
 1. -e         Create excel report.
-2. -f <arg>   Date from which we will filter your data
+2. -f <arg>   Date from which we will filter your data; format yyyy-mm-dd
 3. -h         help
 4. -i <arg>   input directory
 5. -o <arg>   output directory
 6. -r <arg>   report type [1-5]
-7. -t <arg>   Date till which we will filter your data
+7. -t <arg>   Date till which we will filter your data; format yyyy-mm-dd
 
 
 # Przykład 
 Wywołanie programu z linii komend: utworzenie raportu excel w domyślnym katalogu, 
 katalog wejściowy /2012, raport nr 1
--e -i ./2012 -o ./ -r 1
+-e -i ./2012 -o ./ -r 1 -f 2012-06-01
 
 
 # Obsługiwane wyjątki plików wejściowych
