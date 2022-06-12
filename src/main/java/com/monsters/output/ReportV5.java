@@ -66,7 +66,6 @@ public class ReportV5 implements Report {
 
         XYChart chart = new XYChartBuilder().width(800).height(600).title("Projekty").xAxisTitle("X").yAxisTitle("Y").build();
 
-        int i = 0;
         for (Map.Entry<String, List<LocalDate>> entry : xDataHashMapListLocalDate.entrySet()) {
             List<Date> xDataList = new LinkedList<>();
             for (LocalDate item : xDataHashMapListLocalDate.get(entry.getKey())) {
@@ -75,10 +74,9 @@ public class ReportV5 implements Report {
             }
             List<Double> yDataList = new ArrayList<Double>();
             for (Double item : yDataHashMapListDouble.get(entry.getKey())) {
-                yDataList.add(item + yDataHashMapListDouble.get(entry.getKey()).get(i));
+                yDataList.add(item);
             }
             XYSeries series = chart.addSeries(entry.getKey(), xDataList, yDataList);
-            i++;
         }
 
         chart.getStyler().setPlotBackgroundColor(ChartColor.getAWTColor(ChartColor.GREY));
