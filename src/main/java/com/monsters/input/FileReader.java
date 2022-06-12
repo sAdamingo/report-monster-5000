@@ -43,6 +43,8 @@ public class FileReader {
         for (int i = 0; i < numberOfSheets; i++) {
 
             HSSFSheet currentSheet = workbook.getSheetAt(i);
+
+            if(InputValidator.validateCorrectHeader(currentSheet)){
             Iterator<Row> rowIterator = currentSheet.rowIterator();
 
             while (rowIterator.hasNext()) {
@@ -56,6 +58,8 @@ public class FileReader {
                 }
             }
         }
+        }
+
         return entryList;
     }
 
@@ -63,7 +67,6 @@ public class FileReader {
     private Entry createEntry(String user, HSSFSheet currentSheet, Row row) {
         Date tempDate = row.getCell(0).getDateCellValue();
         LocalDate date = tempDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
 
         String project = currentSheet.getSheetName();
         String taskName = validateTaskName(row);

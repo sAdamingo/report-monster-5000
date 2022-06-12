@@ -1,6 +1,8 @@
 package com.monsters.input;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 
@@ -15,7 +17,7 @@ public class InputValidator {
     public static boolean isRowEmptyOrHeader(Row row) {
         if (row.getCell(0) != null
                 && row.getCell(0).getCellType() != CellType.BLANK
-                && !row.getCell(0).toString().equals("Data")) {
+                && !row.getCell(0).toString().equals("Data")){
             return true;
         } else {
             log.info("Found empty row");
@@ -25,18 +27,23 @@ public class InputValidator {
 
 
     public static boolean isDateBetweenDates(Row row, LocalDate from, LocalDate to) {
-        Date tempDate = row.getCell(0).getDateCellValue();
-        LocalDate date = tempDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        try {
+            Date tempDate = row.getCell(0).getDateCellValue();
+            LocalDate date = tempDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-        if(date.isAfter(from) && date.isBefore(to)){
-            return true;
+            if (date.isAfter(from) && date.isBefore(to)) {
+                return true;
+            } else {
+                log.error("data is invalid row: "
+                        + row.getRowNum()
+                        + " date should be between "
+                        + from + " " + to + " was: "
+                        + date);
+                return false;
+            }
         }
-        else{
-            log.info("data is invalid row: "
-                    + row.getRowNum()
-                    + " date should be between "
-                    + from + " " + to + " was: "
-                    + date );
+        catch (java.lang.IllegalStateException e){
+            log.error("Found text in date column, row: " +row.getRowNum());
             return false;
         }
     }
@@ -47,9 +54,9 @@ public class InputValidator {
             return true;
         }
         else{
+            log.error("Duration in row: " + row.getRowNum() + " is bigger than 24h");
             return false;
         }
-
 
     }
 
@@ -59,7 +66,17 @@ public class InputValidator {
             return true;
         }
         else{
+            log.error("Duration in row: " + row.getRowNum() + " is less than 0");
             return false;
         }
+    }
+
+    public static boolean validateCorrectHeader(HSSFSheet currentSheet) {
+        Cell dateHeader = currentSheet.getRow(0).getCell(0);
+        Cell taskHeader = currentSheet.getRow(0).getCell(1);
+        Cell durationHeader = currentSheet.getRow(0).getCell(2);
+        return dateHeader.toString().equals("Data")
+                && taskHeader.toString().equals("Zadanie")
+                && durationHeader.toString().equals("Czas [h]");
     }
 }

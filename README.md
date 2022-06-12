@@ -35,3 +35,12 @@ Apache POI
 
 
 #Przykład 
+
+
+
+# Obsługiwane wyjątki plików wejściowych
+- Sprawdzenie pustych wierszy,
+- Sprawdzenie czy czas trawnia zadania nie jest większy niż 24h
+- Sprawdzenie czy czas trwania zadania jest dodatni
+- Sprawdzenie czy opis zadania jest wpisany, jeżeli nie przyjmuje się domyślną wartośc NO DATA
+- Błędy związane z wpisaniem tekstu w polu data
