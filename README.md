@@ -38,7 +38,6 @@ Apache POI
 7. -t <arg>   Date till which we will filter your data
 
 
-
 # Przykład 
 Wywołanie programu z linii komend: utworzenie raportu excel w domyślnym katalogu, 
 katalog wejściowy /2012, raport nr 1
