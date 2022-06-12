@@ -14,7 +14,7 @@ Program jest uruchamiany z konsoli, użytkownik wpisuje do linii komend wywołan
 progamu oraz listę parametrów.
 Program generuje syntetyczne raporty, które są wyświetlane w konsoli, moga być także
 eksportowane do pliku excel.
-Program posiada bazowa obsługe błędów.
+Program posiada bazową obsługę błędów.
 
 # Technologie
 Java 11
@@ -37,12 +37,10 @@ Apache POI
 6. -r <arg>   report type [1-5]
 7. -t <arg>   Date till which we will filter your data; format yyyy-mm-dd
 
-
 # Przykład 
 Wywołanie programu z linii komend: utworzenie raportu excel w domyślnym katalogu, 
 katalog wejściowy /2012, raport nr 1
 -e -i ./2012 -o ./ -r 1 -f 2012-06-01
-
 
 # Obsługiwane wyjątki plików wejściowych
 - Sprawdzenie pustych wierszy,
