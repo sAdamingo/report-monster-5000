@@ -1,19 +1,22 @@
 package com.monsters.output;
 
 import com.monsters.util.Entry;
+import com.monsters.util.InputVerificator;
+import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
-import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ReportV1 implements Report {
+    private static final Logger log = Logger.getLogger(ReportV1.class.getName());
+
     List<Entry> entryList;
 
     public ReportV1(List<Entry> entryList) {
@@ -66,11 +69,9 @@ public class ReportV1 implements Report {
     @Override
     public void exportToExcel(String outputPath) {
         HashMap<String, Double> mapToPrint = sumEntryList(entryList);
-
-        createChart();
         Workbook wb = new HSSFWorkbook();
-        CreationHelper createHelper = wb.getCreationHelper();
-        Sheet sheet = wb.createSheet("report_1");
+
+        Sheet sheet = addChart(wb);
 
         Row row0 = sheet.createRow(0);
         Cell cell00 = row0.createCell(0);
@@ -103,15 +104,37 @@ public class ReportV1 implements Report {
         }
     }
 
+    private Sheet addChart(Workbook wb) {
+        createChart();
+        int inputImagePicture = wb.addPicture(createChart(), Workbook.PICTURE_TYPE_PNG);
+        CreationHelper createHelper = wb.getCreationHelper();
+        Sheet sheet = wb.createSheet("report_1");
+        Drawing drawing = (Drawing) sheet.createDrawingPatriarch();
+        HSSFClientAnchor clientAnchor = new HSSFClientAnchor();
+        clientAnchor.setCol1(10);
+        clientAnchor.setCol2(20);
+        clientAnchor.setRow1(0);
+        clientAnchor.setRow2(10);
+        drawing.createPicture(clientAnchor, inputImagePicture);
+        return sheet;
+    }
+
     @Override
     public void exportToPDF() {
 
     }
 
     @Override
-    public void createChart() {
+    public byte[] createChart() {
         CategoryChart chart = getChart();
-        new SwingWrapper<CategoryChart>(chart).displayChart();
+        try {
+            return BitmapEncoder.getBitmapBytes(chart, BitmapEncoder.BitmapFormat.PNG);
+        } catch (IOException e) {
+            log.warn("Cannot create a chart");
+            throw new RuntimeException(e);
+
+        }
+//        new SwingWrapper<CategoryChart>(chart).displayChart();
     }
 
      CategoryChart getChart() {
@@ -143,6 +166,7 @@ public class ReportV1 implements Report {
          } catch (IOException e) {
              throw new RuntimeException(e);
          }
+
 
          return chart;
 

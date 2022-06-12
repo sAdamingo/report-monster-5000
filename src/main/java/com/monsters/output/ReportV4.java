@@ -110,7 +110,7 @@ public class ReportV4 implements Report {
     }
 
     @Override
-    public void createChart() {
-
+    public byte[] createChart() {
+        return new byte[0];
     }
 }
