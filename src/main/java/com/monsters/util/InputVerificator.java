@@ -4,6 +4,7 @@ import com.monsters.Main;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.time.LocalDate;
 
 public class InputVerificator {
 
@@ -11,28 +12,39 @@ public class InputVerificator {
     private String inputPath;
     private String outputPath;
     private int reportNumber;
+    private LocalDate fromDate;
+    private LocalDate toDate;
 
-    public InputVerificator(String inputPath, String outputPath, int reportNumber) {
+    public InputVerificator(String inputPath, String outputPath, int reportNumber, LocalDate fromDate, LocalDate toDate) {
         this.inputPath = inputPath;
         this.outputPath = outputPath;
         this.reportNumber = reportNumber;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
     }
 
-    private boolean verifyInputPath() {
-        if (inputPath.equals("")) {
-            this.inputPath = "./";
-            return true;
+    private void verifyInputPath() {
+        // jeśli input istnieje i jest folderem to true
+
+        File f = new File(inputPath);
+
+        if (!f.exists()) {
+            inputPath = "./";
         }
-        return true;
     }
 
-    private boolean verifyOutputPath() {
+    private void verifyOutputPath() {
+        // jeśli output nie istnieje (directory) to tworzysz folder
+        // chyba że jest źle sformatowana to podajesz domyślną
         File f = new File(outputPath);
-        if (f.exists()) {
-            return false;
+        boolean folderCreated = false;
+        if (!f.exists()) {
+            // output folder nie istnieje stwórz folder
+            folderCreated = f.mkdirs();
         }
-        this.outputPath = "./";
-        return true;
+        if (!folderCreated) {
+            this.outputPath = "./";
+        }
     }
 
     private boolean verifyReportNumber() {
@@ -42,19 +54,46 @@ public class InputVerificator {
                 reportNumber == 4 ||
                 reportNumber == 5) {
             // valid reportNumber
-            this.reportNumber = reportNumber;
             return true;
         }
         return false;
     }
 
+    private boolean verifyToDate() {
+        LocalDate today = LocalDate.now();
+        if (this.toDate.isAfter((today)))  {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean verifyFromDate() {
+        LocalDate epochDay = LocalDate.EPOCH;
+        if (this.fromDate.isBefore(epochDay)) {
+            return false;
+        }
+        return true;
+    }
+
     /*
         Returns correct inputPath or throws exception
      */
-    public void verifyParameters() {
-        verifyOutputPath();
-        verifyReportNumber();
-        verifyInputPath();
+    public boolean verifyParameters() {
+        // jeśli input istnieje i jest folderem to true
+        // jeśli output nie istnieje (directory) to tworzysz folder
+        // chyba że jest źle sformatowana to podajesz domyślną
+        boolean report = verifyReportNumber();
+        if (report) {
+            verifyInputPath();
+            boolean fromDate = verifyFromDate();
+            boolean toDate = verifyToDate();
+            verifyOutputPath();
+
+            return fromDate && toDate;
+        } else {
+            log.error("Wrong report type.");
+            return false;
+        }
 
 
     }
@@ -81,5 +120,21 @@ public class InputVerificator {
 
     public void setReportNumber(int reportNumber) {
         this.reportNumber = reportNumber;
+    }
+
+    public LocalDate getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public LocalDate getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(LocalDate toDate) {
+        this.toDate = toDate;
     }
 }
