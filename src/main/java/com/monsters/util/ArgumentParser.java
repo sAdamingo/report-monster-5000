@@ -31,6 +31,7 @@ public class ArgumentParser {
         CommandLine cmd = null;
 
         try {
+            boolean help = false;
             cmd = parser.parse(options, args);
             if (cmd.getOptions().length == 0){
                 HelpFormatter formatter = new HelpFormatter();
@@ -40,52 +41,57 @@ public class ArgumentParser {
             if (cmd.hasOption("h") && cmd.getOptions().length > 1) {
                 throw new ParseException("Parameter h can only go alone");
             } else {
-                System.out.println("POMOC");
+                HelpFormatter formatter = new HelpFormatter();
+                formatter.printHelp("report FILE_PATH", options);
+                help = true;
             }
-            if (cmd.hasOption("r")) {
-                String reportType = cmd.getOptionValue("r");
-                try {
-                    this.reportNumber = Integer.parseInt(reportType);
-                } catch (NumberFormatException e) {
-                    this.reportNumber = 0;
-                    log.error("Report type should be a number between 1 and 5");
+            if (!help) {
+                if (cmd.hasOption("r")) {
+                    String reportType = cmd.getOptionValue("r");
+                    try {
+                        this.reportNumber = Integer.parseInt(reportType);
+                    } catch (NumberFormatException e) {
+                        this.reportNumber = 0;
+                        log.error("Report type should be a number between 1 and 5");
+                    }
                 }
-            }
-            if (cmd.hasOption("i")) {
-                this.inputPath = cmd.getOptionValue("i");
-            } else {
-                this.inputPath = "";
-            }
-            if (cmd.hasOption("o")) {
-                this.outputPath = cmd.getOptionValue("o");
-            } else {
-                this.outputPath = "";
-            }
-            if (cmd.hasOption("f")) {
-              String date = cmd.getOptionValue(("f"));
-              try {
-                  LocalDate from =  LocalDate.parse(date);
-                  this.fromDate = from;
-              } catch (DateTimeParseException e) {
-                  log.warn("From date badly formatted. – the text to parse should be formatted as follows: \"2007-12-03\"");
-                  this.fromDate = LocalDate.MIN;
-              }
-            } else {
-                this.fromDate = LocalDate.MIN;
-            }
-            if (cmd.hasOption("t")) {
-                String date = cmd.getOptionValue(("t"));
-                try {
-                    LocalDate till =  LocalDate.parse(date);
-                    this.tillDate = till;
-                } catch (DateTimeParseException e) {
-                    log.warn("From date badly formatted. – the text to parse should be formatted as follows: \"2007-12-03\"");
-                    this.tillDate = LocalDate.MAX;
+                if (cmd.hasOption("i")) {
+                    this.inputPath = cmd.getOptionValue("i");
+                } else {
+                    this.inputPath = "";
+                }
+                if (cmd.hasOption("o")) {
+                    this.outputPath = cmd.getOptionValue("o");
+                } else {
+                    this.outputPath = "";
+                }
+                if (cmd.hasOption("f")) {
+                    String date = cmd.getOptionValue(("f"));
+                    try {
+                        LocalDate from =  LocalDate.parse(date);
+                        this.fromDate = from;
+                    } catch (DateTimeParseException e) {
+                        log.warn("From date badly formatted. – the text to parse should be formatted as follows: \"2007-12-03\"");
+                        this.fromDate = LocalDate.MIN;
+                    }
+                } else {
+                    this.fromDate = LocalDate.MIN;
+                }
+                if (cmd.hasOption("t")) {
+                    String date = cmd.getOptionValue(("t"));
+                    try {
+                        LocalDate till =  LocalDate.parse(date);
+                        this.tillDate = till;
+                    } catch (DateTimeParseException e) {
+                        log.warn("From date badly formatted. – the text to parse should be formatted as follows: \"2007-12-03\"");
+                        this.tillDate = LocalDate.MAX;
+                    }
+                } else {
+                    this.fromDate = LocalDate.MAX;
                 }
             } else {
-                this.fromDate = LocalDate.MAX;
+                return false;
             }
-
 
         } catch (ParseException e) {
             HelpFormatter formatter = new HelpFormatter();

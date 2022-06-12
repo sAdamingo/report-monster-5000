@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         log.info("App Startup");
 
-        System.out.println("Welcome to REPORT MONSTER 5000!!!!1!");
+        log.info("Welcome to REPORT MONSTER 5000!!!!1!");
 
         ArgumentParser parser = new ArgumentParser();
         if (parser.parseArgs(args)) {
